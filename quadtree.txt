@@ -1,0 +1,19 @@
+private static void Quadtree(int n, int x, int y) {
+		int Sum = 0;
+		for(int i = x; i < x+n; i++) {
+			for(int j = y; j < y+n ; j++) {
+				if(arr[i][j] == 1)
+				Sum += arr[i][j];
+			}
+		}
+		if(Sum == n*n) {
+			// 조건부 실행
+			return;
+		}else if(Sum == 0) {
+			// 조건부 실행
+			return;
+		}
+		if(n/2 == 0) return;
+		
+		// 알고리즘
+	}
