@@ -12,22 +12,22 @@ class Point {
 }
 
 public class Main {
-	// ÇÙ½ÉÀº º¹»çÇÏ±â Çà·Ä
+	// í•µì‹¬ì€ ë³µì‚¬í•˜ê¸° í–‰ë ¬
 	
 	private static final int dx[] = {0,0,1,-1};
 	private static final int dy[] = {-1,1,0,0};
 	
 	private static void solve(int board[][], Queue<Point> q) {
-		// ¹è¿­ ±íÀº º¹»ç
+		// ë°°ì—´ ê¹Šì€ ë³µì‚¬
 		int newBoard[][] =	new int[board.length][board[0].length];
 		for(int i = 0; i<newBoard.length; i++) {
 			System.arraycopy(board[i], 0, newBoard[i], 0, board[0].length);
 		}
-		// Å¥ ±íÀº º¹»ç
+		// í ê¹Šì€ ë³µì‚¬
 		Queue<Point> newQ = new LinkedList();
 		newQ.addAll(q);
 		
-		int bNum = blank; // ºóÄ­ÀÇ °³¼ö 
+		int bNum = blank; // ë¹ˆì¹¸ì˜ ê°œìˆ˜ 
 		while(!newQ.isEmpty()) {
 			Point p = newQ.poll();
 			for(int i = 0; i<4; i++) {			
@@ -35,20 +35,20 @@ public class Main {
 				int y = p.r + dy[i];
 				if(x >= 0 && x < M && y >= 0 && y < N) {
 					if (newBoard[y][x] == 0) {
-						newBoard[y][x] = 2; // °¨¿°
+						newBoard[y][x] = 2; // ê°ì—¼
 						newQ.add(new Point(y, x));
 						bNum--;
 					}
 				}
 			}
 		}
-		// °¨¿°ÀÌ ¸ğµÎ ³¡³ª¸é..	
+		// ê°ì—¼ì´ ëª¨ë‘ ëë‚˜ë©´..	
 		if(bNum > max)
 			max = bNum;
 	}
 
-	private static void makeWall(int board[][], int cnt, int a, int b, Queue q) {
-		// Àç±Í·Î ¸ğµç º® 3°³ ¹èÄ¡ÇÏ´Â ¸ğµç °æ¿ìÀÇ ¼ö(2Â÷¿ø ¹è¿­¾È¿¡¼­)
+	private static void makeWall(int board[][], int cnt, int a, Queue q) {
+		// ì¬ê·€ë¡œ ëª¨ë“  ë²½ 3ê°œ ë°°ì¹˜í•˜ëŠ” ëª¨ë“  ê²½ìš°ì˜ ìˆ˜(2ì°¨ì› ë°°ì—´ì•ˆì—ì„œ)
 		if (cnt == 3) {
 			solve(board, q);			
 			return;
@@ -58,11 +58,10 @@ public class Main {
 			for (int j = b; j < M; j++) {
 				if (board[i][j] == 0) {
 					board[i][j] = 1;
-					makeWall(board, cnt + 1, i, j, q);
+					makeWall(board, cnt + 1, i, q);
 					board[i][j] = 0;
 				}
 			}
-			b = 0;
 		}
 	}
 
@@ -93,10 +92,10 @@ public class Main {
 			}
 		}
 
-		// º® 3°³
+		// ë²½ 3ê°œ
 		// brute force
-		// º®À» ¼¼¿ì´Â ¸ğµç °æ¿ì¸¦ µûÁ®ºÁ¾ßÇÔ
-		makeWall(board, 0, 0, 0, q);
+		// ë²½ì„ ì„¸ìš°ëŠ” ëª¨ë“  ê²½ìš°ë¥¼ ë”°ì ¸ë´ì•¼í•¨
+		makeWall(board, 0, 0, q);
 		System.out.println(max-3);
 	}
 }
