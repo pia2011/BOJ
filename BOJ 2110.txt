@@ -1,0 +1,50 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+	private static boolean isRight(int dist) {
+		int cnt = 1; // 시작점은 원래 가지고 시작하기 때문에..
+		int last = arr[1];
+		for(int i = 1; i<=N; i++) {
+			if(arr[i] - last >= dist) { // (dist)거리보다 커야함
+				cnt ++; // 가능한 공유기의 개수
+				last = arr[i];
+			}
+		}
+				
+		return  cnt >= C; // 크기만 하면 문제는 없음 : 버리면 됨
+	}
+	private static int N;
+	private static int arr[];
+	private static int C;
+	public static void main(String[] args) throws IOException {
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		C = Integer.parseInt(st.nextToken());
+		arr = new int[N+1];
+		for(int i = 1; i<=N; i++) {
+			arr[i] = Integer.parseInt(br.readLine());		
+		}
+		Arrays.sort(arr);
+		
+		int right = arr[N] - arr[1]; // 거리의 최대값
+		int left = 1; // 거리의 최소값
+		int max = 1;
+		while(left <= right) {
+			int mid = (right + left)/2;
+			if(isRight(mid)) { // 가능성 판단				
+				if(mid > max)
+					max = mid;
+				left = mid + 1; // 늘리기	: 늘려도 가능하기 때문(어차피 최소값은 동일)			
+			}else {
+				right = mid - 1; // 줄이기			
+			}			
+		}		
+		System.out.println(max);		
+	}
+}
