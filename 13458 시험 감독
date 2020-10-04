@@ -1,0 +1,42 @@
+import java.io.*;
+import java.util.*;
+public class Main {
+
+	public static void main(String[] args) throws IOException {
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+		int N = Integer.parseInt(br.readLine());
+		int arr[] = new int[N];
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		for(int i = 0; i<N; i++) {
+			arr[i] = Integer.parseInt(st.nextToken());
+		}
+		st = new StringTokenizer(br.readLine());
+		int B = Integer.parseInt(st.nextToken()); // 총감독관 용량
+		int C = Integer.parseInt(st.nextToken()); // 부감독관 용량
+		long cnt = N; 
+		for(int i = 0; i<N; i++) {
+			if(arr[i]-B <= 0)
+				arr[i] = 0;
+			else 
+				arr[i] -= B;			
+		}
+
+		for(int i = 0; i<N; i++) {
+			if(arr[i] != 0) { // 나머지가 0이면 부감독이 필요 없음
+				if(arr[i]/C == 0)  // 몫이 없으면 부감독이 1명만 있으면 됨
+					cnt++;
+				else {
+					if(arr[i]%C == 0) // 딱 나누어 떨어지면 나누어 떨어진 만큼의 부감독이 있으면 됨
+						cnt+= arr[i]/C;
+					else { // 그게 아니면 몫에서 1명 더 필요함
+						cnt+= arr[i]/C+1;
+					}	
+				} 
+			}
+		}
+		System.out.println(cnt);
+	}
+}
