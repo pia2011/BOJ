@@ -1,0 +1,60 @@
+import java.io.*;
+import java.util.*;
+public class Main {
+
+	private static int[][] mul(int a[][], int b[][]) {
+		int c[][] = new int[N][N];
+		// 다 같으므로
+		for(int i = 0; i<N; i++) {
+			for(int j = 0; j<N; j++) {
+				for(int k = 0; k<N; k++) {
+					c[i][j] += a[i][k] * b[k][j]; // 행렬의 곱셈 공식					
+					c[i][j] %= 1000; // 1000으로 나눈 나머지
+				}
+			}
+		}
+		return c;
+	}
+	private static int [][]same; // 항등 행렬
+	private static int[][] pow(int arr[][], long n) {
+		if (n == 0)
+			return same;
+		if (n % 2 > 0)
+			return mul(pow(arr, n - 1), arr);
+		int[][] arr2 = pow(arr, n / 2);
+		return mul(arr2, arr2);
+	}
+
+	private static int N;
+	public static void main(String[] args) throws IOException {
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken()); // N 행렬의 차수
+		long B = Long.parseLong(st.nextToken()); // B 제곱 수
+		int arr[][] = new int[N][N];
+		same = new int[N][N];
+		for(int i = 0; i<N; i++) {
+			st = new StringTokenizer(br.readLine());
+			for(int j = 0; j<N; j++) {
+				arr[i][j] = Integer.parseInt(st.nextToken()); 
+				if(i == j)
+					same[i][j] = 1;
+			}
+		}
+		
+		
+		// 입력 끝	
+		arr = pow(arr,B); // arr을 B제곱
+		
+		for(int i = 0; i<N; i++) {			
+			for(int j = 0; j<N; j++) {
+				bw.write(arr[i][j]+" ");
+			}
+			bw.write("\n");;
+		}
+		bw.flush();
+	}
+}
