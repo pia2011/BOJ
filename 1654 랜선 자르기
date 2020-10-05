@@ -1,0 +1,45 @@
+import java.io.*;
+import java.util.*;
+public class Main {
+
+	private static void solve(long start, long end) {		
+		while(end - start >=0) {		
+			int Sum = 0;
+			long mid = (start + end)/2;
+			for(int i = 0; i<K; i++) {
+				Sum += arr[i]/mid;
+			}
+			if(Sum>=N) {
+				if(ans < mid)
+					ans = mid;
+				start = mid + 1;
+			}else {
+				end = mid - 1;
+			}
+		}			
+	}
+	private static int arr[];
+	private static int N,K;
+	private static long ans = 0;
+	public static void main(String[] args) throws IOException {
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		K = Integer.parseInt(st.nextToken());
+		N = Integer.parseInt(st.nextToken());
+		arr = new int[K];
+		int max = 0;
+		for(int i = 0; i<K; i++) {
+			arr[i] = Integer.parseInt(br.readLine());
+			if(arr[i]>max)
+				max = arr[i];
+		}
+		// N개를 만들 수 있는 최대 랜선 길이
+		
+		// 제일 큰거 기준으로
+		solve(1,max);
+		System.out.println(ans);
+	}
+}
