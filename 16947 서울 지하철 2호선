@@ -1,0 +1,87 @@
+import java.io.*;
+import java.util.*;
+
+// 항상 나보다 더 나은 방법이 있다
+public class Main {
+
+	
+	
+	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+	static int check[];
+	static ArrayList<Integer> []adj;
+	
+    static int go(int x, int p) {
+        // -2: found cycle and not included
+        // -1: not found cycle
+        // 0~n-1: found cycle and start index
+        if (check[x] == 1) {
+            return x;
+        }
+        check[x] = 1;
+        
+        for (int y : adj[x]) {
+            if (y == p) continue;
+            int res = go(y, x);
+            if (res == -2) return -2;
+            if (res >= 0) {
+                check[x] = 2;
+                if (x == res) return -2;
+                else return res;
+            }
+        }
+        return -1;
+    }
+	
+	public static void main(String[] args) throws IOException {
+
+		int n = Integer.parseInt(br.readLine());
+		check = new int[n+1];	
+		int dist[] = new int[n+1];
+		adj = new ArrayList[n+1];
+		for(int i = 1; i<=n; i++) {
+			adj[i] = new ArrayList<Integer>();
+		}
+		
+		for(int i = 0; i<n; i++) { // 양방향 연결
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			adj[a].add(b);
+			adj[b].add(a);
+		}
+		
+		// 순환선 찾기
+		go(1,-1);
+		
+		// 거리 재기
+		Queue<Integer> q = new LinkedList<>();
+		for(int i = 1; i<=n; i++) {
+			// 순환선인 역
+			if(check[i] == 2) {
+				dist[i] = 0;
+				q.add(i);	
+			}else { 
+				// 순환선이 아닌역
+				dist[i] = -1;
+			}
+		}
+		
+		while(!q.isEmpty()) {
+			int x = q.poll();
+			for(int y : adj[x]) { // 큐에 추가되어있  순환선인 역들 혹은 큐에 추가된 순환선과 연결된 역들
+				if(dist[y] == -1) { // 순환선이 아니라면
+					q.add(y);
+					dist[y] = dist[x] + 1;							
+				}
+			}
+		}
+		
+		for(int i = 1; i<=n; i++) {
+			System.out.print(dist[i]+" ");
+		}
+		
+		
+	}
+}
