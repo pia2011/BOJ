@@ -1,0 +1,88 @@
+import java.io.*;
+import java.util.*;
+
+// 항상 나보다 더 나은 방법이 있다
+public class Main {
+		
+	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	
+	static void bfs(int []a, ArrayList<Integer> adj[], boolean check[], int n) {
+		
+		Queue<Integer> q = new LinkedList<Integer>();
+		ArrayList<Integer> array_ans = new ArrayList<Integer>(); // 비교할 답
+		q.add(1);
+		check[1] = true;
+		
+		// start
+		while(!q.isEmpty()) {
+			int x = q.poll();
+			array_ans.add(x);
+			for(int y : adj[x]) {
+				if(!check[y]) {
+					check[y] = true;
+					q.add(y);					
+				}
+			}
+		}
+		
+		boolean isRight = true;
+		// compare
+		for(int i = 1; i<=n;i++) {
+			if(array_ans.get(i - 1) != a[i]) {
+				isRight = false;
+				break;
+			}
+		}
+		
+		System.out.println(isRight ? 1 : 0);
+		
+	} 
+	
+	public static void main(String[] args) throws IOException {
+
+		int n = Integer.parseInt(br.readLine());
+		ArrayList<Integer> []adj = new ArrayList[n + 1];
+		for(int i = 1;i <= n; i++) {
+			adj[i] = new ArrayList<Integer>();
+		}
+		
+		// 연결 짓기
+		for(int i = 0; i<n-1; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			
+			adj[a].add(b);
+			adj[b].add(a);			
+		}			
+		
+		// 순서 저장하기
+		int []order = new int[n + 1];
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int []a = new int[n + 1];
+		for(int i = 1;i <= n; i++) {
+			a[i] = Integer.parseInt(st.nextToken());
+			order[a[i]] = i; // 각 숫자의 순서 저장
+		}
+		
+		boolean check[] = new boolean[n + 1];
+		
+		// 연결관계에서 순서 통일 시키기(오름차순)		
+		for(int i = 1; i<=n; i++) {
+			Collections.sort(adj[i], new Comparator<Integer>() {
+				public int compare(Integer a, Integer b) {
+					if(order[a] < order[b]) {
+						return -1;
+					}else if(order[a] == order[b]) {
+						return 0;
+					}else {
+						return 1;
+					}
+				}				
+			});
+		}
+		
+		bfs(a, adj, check, n);
+	}
+}
